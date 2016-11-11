@@ -40,22 +40,3 @@ DELETE /api/dashboards/:dashboardName/widgets/:widgetId
 
 
 
-
-Widget file system
-/widgets/test-hub/test-hub.hbs
----------------------------------
-
-
-/widgets/test-hub/test-hub.css
----------------------------------
-
-
-
-/widgets/test-hub/test-hub.js
----------------------------------
-Widgets.register("test-hub", new Widget({
-    size: [1, 1],
-    render: function (element, data) {
-        $(element)
-    }
-}));
