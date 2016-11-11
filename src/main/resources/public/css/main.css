@@ -1,0 +1,113 @@
+body {
+    margin: 0px;
+}
+
+a.link-with-icon span.link-icon {
+    padding-right: 5px;
+    width: 24px;
+}
+
+.navbar {
+    margin: 0;
+    border-radius: 0;
+    background: #222;
+}
+nav a.navbar-brand img {
+    position: absolute;
+    left: 8px;
+    top: 12px;
+}
+nav a.navbar-brand {
+    font-weight: bold;
+    padding-left: 40px;
+    position: relative;
+}
+
+.container {
+    width: auto;
+    padding-top: 5px;
+}
+
+.panel-heading {
+    padding: 4px 8px 4px 8px;
+    position: relative;
+}
+.panel-heading .panel-buttons {
+    display: inline-block;
+}
+.panel-heading .panel-buttons button {
+    padding: 3px;
+}
+.panel-heading .panel-buttons button .glyphicon {
+    font-size: 10px;
+    margin: 0;
+}
+.panel-body {
+    padding: 2px;
+}
+
+.table thead tr th {
+    font-size: 0.8em;
+    padding: 4px;
+}
+
+.table tbody tr td {
+    font-size: 0.9em;
+    padding: 4px;
+}
+.table tbody tr td button {
+    padding: 4px;
+}
+
+
+.widget-container .widget {
+    margin: 10px;
+    width: 200px;
+    height: 100px;
+    float: left;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.widget-container:after {
+    content: " ";
+    font-size: 1px;
+    display: block;
+    clear: left;
+}
+
+.job-widget {
+    position: relative;
+    background: #444;
+    color: #fff;
+}
+
+.job-name {
+    position: absolute;
+    display: block;
+    color: white;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 20px;
+}
+.job-name:hover {
+    color: white;
+    text-decoration: none;
+}
+.failed-tests-count {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    font-size: 25px;
+    background: white;
+    color: black;
+    padding: 0 5px 0 5px;
+    border-radius: 5px;
+}
+.job-widget.job-widget-status-passed {
+    background: green;
+}
+.job-widget.job-widget-status-failed {
+    background: red;
+}
