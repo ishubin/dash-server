@@ -22,7 +22,7 @@ import net.mindengine.dashserver.controllers.DashboardApiController;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
-        DashboardStorage dashboardStorage = new DashboardStorageImpl();
+        DashboardStorage dashboardStorage = new DashboardStorageImpl("storage");
 
         new DashboardApiController(dashboardStorage);
     }

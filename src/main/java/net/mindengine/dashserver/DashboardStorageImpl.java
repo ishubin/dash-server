@@ -15,16 +15,65 @@
  ******************************************************************************/
 package net.mindengine.dashserver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.mindengine.dashserver.model.Dashboard;
 import net.mindengine.dashserver.model.WidgetRequest;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DashboardStorageImpl implements DashboardStorage {
+    private final File dashboardStorageDir;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private Map<String, Dashboard> dashboards = new ConcurrentHashMap<>();
 
+    public DashboardStorageImpl(String storagePath) {
+        dashboardStorageDir = new File(storagePath + File.separator + "dashboards");
+        makeSureDirectoryExists(dashboardStorageDir);
+        loadFromStorage();
+    }
+
+    private void makeSureDirectoryExists(File dir) {
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new RuntimeException("Couldn't create directory: " + dir.getAbsolutePath());
+            }
+        } else if (!dir.isDirectory()) {
+            throw new RuntimeException("Not a directory: " + dir.getAbsolutePath());
+        }
+    }
+
+    private void loadFromStorage() {
+        File[] files = dashboardStorageDir.listFiles();
+        for (File dashboardFile : files) {
+            loadDashboard(dashboardFile);
+        }
+    }
+
+    private void loadDashboard(File dashboardFile) {
+        try {
+            Dashboard dashboard = new Dashboard(objectMapper.readValue(dashboardFile, Dashboard.class));
+            dashboard.getWidgets().putAll(dashboard.getWidgets());
+            dashboards.put(dashboard.getName(), dashboard);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void save(Dashboard dashboard) {
+        try {
+            synchronized (dashboard.getName().intern()) {
+                File dashboardFile = new File(dashboardStorageDir.getAbsolutePath() + File.separator + dashboard.getName() + ".json");
+                dashboardFile.createNewFile();
+                objectMapper.writeValue(dashboardFile, dashboard);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void createDashboard(String name) {
@@ -36,8 +85,11 @@ public class DashboardStorageImpl implements DashboardStorage {
             if (dashboards.containsKey(name)) {
                 throw new IllegalArgumentException("Dashboard already exists with name: " + name);
             }
-            dashboards.put(name, new Dashboard(name));
+            Dashboard dashboard = new Dashboard(name);
+            dashboards.put(name, dashboard);
+            save(dashboard);
         }
+
     }
 
     @Override
@@ -48,6 +100,8 @@ public class DashboardStorageImpl implements DashboardStorage {
                 dashboard.putWidget(w.getKey(), w.getValue().asWidget())
             );
         }
+
+        save(dashboard);
     }
 
     @Override
@@ -56,6 +110,8 @@ public class DashboardStorageImpl implements DashboardStorage {
         if (dashboard != null) {
             dashboard.putWidget(widgetName, widgetRequest.asWidget());
         }
+
+        save(dashboard);
     }
 
     @Override
@@ -76,5 +132,7 @@ public class DashboardStorageImpl implements DashboardStorage {
         } else {
             throw new RuntimeException("Dashboard does not exist: " + dashboardName);
         }
+
+        save(dashboard);
     }
 }

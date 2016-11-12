@@ -30,6 +30,11 @@ public class Dashboard {
         this.name = name;
     }
 
+    public Dashboard(Dashboard copy) {
+        this.name = copy.getName();
+        this.widgets.putAll(copy.getWidgets());
+    }
+
     public String getName() {
         return name;
     }
