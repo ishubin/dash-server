@@ -23,12 +23,12 @@ import net.mindengine.dashserver.model.WidgetRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DashboardController extends Controller {
+public class DashboardApiController extends Controller {
     private TypeReference<HashMap<String,WidgetRequest>> WIDGET_REQUESTS_TYPE = new TypeReference<HashMap<String, WidgetRequest>>() {};
 
     private final DashboardStorage dashboardStorage;
 
-    public DashboardController(DashboardStorage dashboardStorage) {
+    public DashboardApiController(DashboardStorage dashboardStorage) {
         this.dashboardStorage = dashboardStorage;
         init();
     }
@@ -58,6 +58,13 @@ public class DashboardController extends Controller {
             WidgetRequest widgetRequest = fromJson(req, WidgetRequest.class);
             dashboardStorage.updateWidget(dashboardName, widgetName, widgetRequest);
             return widgetRequest;
+        });
+
+        deleteJson("/api/dashboards/:dashboardName/widgets/:widgetName", (req, res) -> {
+            String dashboardName = req.params("dashboardName");
+            String widgetName = req.params("widgetName") ;
+            dashboardStorage.removeWidget(dashboardName, widgetName);
+            return "removed widget " + widgetName;
         });
     }
 }

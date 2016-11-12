@@ -67,4 +67,14 @@ public class DashboardStorageImpl implements DashboardStorage {
             throw new RuntimeException("Dashboard does not exist: " + dashboardName);
         }
     }
+
+    @Override
+    public void removeWidget(String dashboardName, String widgetName) {
+        Dashboard dashboard = dashboards.get(dashboardName);
+        if (dashboard != null) {
+            dashboard.getWidgets().remove(widgetName);
+        } else {
+            throw new RuntimeException("Dashboard does not exist: " + dashboardName);
+        }
+    }
 }

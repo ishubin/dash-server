@@ -22,6 +22,7 @@ import spark.*;
 import java.io.IOException;
 
 import static net.mindengine.dashserver.JsonTransformer.toJson;
+import static spark.Spark.delete;
 import static spark.Spark.post;
 import static spark.Spark.get;
 
@@ -37,15 +38,26 @@ public class Controller {
         return objectMapper.readValue(req.body(), typeReference);
     }
 
+    public static Route jsonRoute(Route route) {
+        return (req, res) -> {
+            res.header("Content-Type", "application/json");
+            return route.handle(req, res);
+        };
+    }
+
     public static void postJson(String path, Route route) {
-        post(path, route, toJson());
+        post(path, jsonRoute(route), toJson());
     }
 
     public static void postJson(String path, String acceptType, Route route) {
-        post(path, acceptType, route, toJson());
+        post(path, acceptType, jsonRoute(route), toJson());
     }
 
     public static void getJson(String path, Route route) {
-        get(path, route, toJson());
+        get(path, jsonRoute(route), toJson());
+    }
+
+    public static void deleteJson(String path, Route route) {
+        delete(path, jsonRoute(route));
     }
 }

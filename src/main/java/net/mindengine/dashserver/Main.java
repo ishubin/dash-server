@@ -16,16 +16,15 @@
 package net.mindengine.dashserver;
 
 
-import net.mindengine.dashserver.controllers.DashboardController;
+import net.mindengine.dashserver.controllers.DashboardApiController;
 
 
 public class Main {
 
-
     public static void main(String[] args) throws InterruptedException {
         DashboardStorage dashboardStorage = new DashboardStorageImpl();
 
-        new DashboardController(dashboardStorage);
+        new DashboardApiController(dashboardStorage);
     }
 
 }

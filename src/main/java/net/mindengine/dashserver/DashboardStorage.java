@@ -28,4 +28,6 @@ public interface DashboardStorage {
     void updateWidget(String dashboardName, String widgetName, WidgetRequest widgetRequest);
 
     Dashboard findDashboard(String dashboardName);
+
+    void removeWidget(String dashboardName, String widgetName);
 }
