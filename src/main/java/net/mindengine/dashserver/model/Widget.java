@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class Widget {
     private int width = 1;
     private int height = 1;
+    private String sortOrder;
+    private String widgetType;
     private JsonNode data;
 
     public int getWidth() {
@@ -46,5 +48,21 @@ public class Widget {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public String getWidgetType() {
+        return widgetType;
+    }
+
+    public void setWidgetType(String widgetType) {
+        this.widgetType = widgetType;
     }
 }

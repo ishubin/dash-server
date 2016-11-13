@@ -39,4 +39,9 @@ GET PUT /api/dashboards/:dashboardName/widgets
 DELETE /api/dashboards/:dashboardName/widgets/:widgetId
 
 
+# Widgets registration
 
+Widgets.register("widget-type", {
+    render: function (widgetDomElement, data) {
+    }
+});

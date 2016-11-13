@@ -33,7 +33,7 @@ public class HandlebarsTemplateEngine extends TemplateEngine {
         ClassPathTemplateLoader classPathTemplateLoader = new ClassPathTemplateLoader();
         classPathTemplateLoader.setPrefix(templatePath);
         classPathTemplateLoader.setSuffix(".hbs");
-        this.handlebars = new Handlebars(new CompositeTemplateLoader(classPathTemplateLoader));
+        this.handlebars = new Handlebars(classPathTemplateLoader);
         initHelpers();
     }
 

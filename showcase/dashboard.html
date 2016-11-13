@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <!-- bootstrap -->
+    <link href="../src/main/resources/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../src/main/resources/public/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../src/main/resources/public/css/main.css" rel="stylesheet">
+
+    <!-- html5 shim and respond.js ie8 support of html5 elements and media queries -->
+    <!-- warning: respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt ie 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="../src/main/resources/public/js/handlebars-v4.0.5.js"></script>
+    <script src="../src/main/resources/public/js/dashboard.js"></script>
+    <script>
+        API = {
+            fetchDashboard: function (dashboardName, callback) {
+                callback({
+                  "name": "demo",
+                  "widgets": {
+                    "api-tests": {
+                      "width": 1,
+                      "height": 1,
+                      "sortOrder": "1-api-tests",
+                      "widgetType": "test-hub",
+                      "data": {
+                        "link": "http://example.com/api-tests",
+                        "title": "API Tests",
+                        "icon": "api",
+                        "failedTests": 0,
+                        "isRunning": false,
+                        "status": "passed"
+                      }
+                    },
+                    "graphs": {
+                      "width": 2,
+                      "height": 2,
+                      "sortOrder": "0-graphs",
+                      "widgetType": "graphs-bars",
+                      "data": {
+                        "title": "Test Statistics"
+                      }
+                    },
+                    "db-tests": {
+                      "width": 1,
+                      "height": 1,
+                      "sortOrder": "1-db-tests",
+                      "widgetType": "test-hub",
+                      "data": {
+                        "link": "http://example.com/db-tests",
+                        "title": "DB Tests",
+                        "icon": "db",
+                        "failedTests": 1,
+                        "isRunning": false,
+                        "status": "failed"
+                      }
+                    },
+                    "selenium-tests": {
+                      "width": 1,
+                      "height": 1,
+                      "sortOrder": "1-selenium-tests",
+                      "widgetType": "test-hub",
+                      "data": {
+                        "link": "http://example.com/selenium-tests",
+                        "title": "Selenium Tests",
+                        "icon": "selenium",
+                        "failedTests": 2,
+                        "isRunning": true,
+                        "status": "failed"
+                      }
+                    }
+                  }
+                });
+            }
+        };
+
+        Widgets.registerWidget("graphs-bars", {
+            render: function (element, data) {
+                $(element).html("Graph");
+            }
+        });
+
+        Widgets.registerWidget("test-hub", {
+            render: function (element, data) {
+                $(element).html("Test");
+            }
+        });
+    </script>
+</head>
+<body>
+<!-- jquery (necessary for bootstrap's javascript plugins) -->
+<script src="../src/main/resources/public/js/jquery-1.8.3.min.js"></script>
+<!-- include all compiled plugins (below), or include individual files as needed -->
+<script src="../src/main/resources/public/js/bootstrap.min.js"></script>
+<script>
+        $(function () {
+            initDashboard(150, 100, $("#dashboard").attr("data-dashboard-name"), $("#dashboard").get());
+        });
+    </script>
+    <div id="dashboard" data-dashboard-name="demo">
+    </div>
+
+    <script id="tpl-widget-cell" type="text/x-handlebars-template">
+        <div id="{{widgetCellId}}" class="widget-cell widget-type-{{widgetType}}"
+             style="left: {{left}}px; top: {{top}}px; width: {{width}}px; height: {{height}}px;">
+        </div>
+    </script>
+</body>
+</html>

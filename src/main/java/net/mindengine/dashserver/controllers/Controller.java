@@ -17,9 +17,13 @@ package net.mindengine.dashserver.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.mindengine.dashserver.templates.HandlebarsTemplateEngine;
 import spark.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import static net.mindengine.dashserver.JsonTransformer.toJson;
 import static spark.Spark.delete;
@@ -27,6 +31,11 @@ import static spark.Spark.post;
 import static spark.Spark.get;
 
 public class Controller {
+    private final static TemplateEngine templateEngine = createHandlebarsEngine();
+
+    private static TemplateEngine createHandlebarsEngine() {
+        return new HandlebarsTemplateEngine("/templates");
+    }
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
@@ -59,5 +68,13 @@ public class Controller {
 
     public static void deleteJson(String path, Route route) {
         delete(path, jsonRoute(route));
+    }
+
+    public void getHsTpl(String path, String templateName, BiConsumer<Request, Map<String, Object>> consumer) {
+        get(path, (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            consumer.accept(req, model);
+            return new ModelAndView(model, templateName);
+        }, templateEngine);
     }
 }

@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package net.mindengine.dashserver.model;
+package net.mindengine.dashserver.controllers;
 
-public class WidgetRequest extends Widget {
-
-    public Widget asWidget() {
-        Widget widget = new Widget();
-        widget.setData(getData());
-        widget.setWidth(getWidth());
-        widget.setHeight(getHeight());
-        widget.setSortOrder(getSortOrder());
-        return widget;
+public class DashboardController extends Controller {
+    public DashboardController() {
+        init();
     }
+
+    private void init() {
+        getHsTpl("/dashboards/:dashboardName", "dashboard", (req, model) -> {
+            model.put("dashboardName", req.params("dashboardName"));
+        });
+    }
+
 }

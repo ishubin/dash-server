@@ -17,6 +17,9 @@ package net.mindengine.dashserver;
 
 
 import net.mindengine.dashserver.controllers.DashboardApiController;
+import net.mindengine.dashserver.controllers.DashboardController;
+
+import static spark.Spark.staticFileLocation;
 
 
 public class Main {
@@ -24,7 +27,9 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         DashboardStorage dashboardStorage = new DashboardStorageImpl("storage");
 
+        staticFileLocation("/public");
         new DashboardApiController(dashboardStorage);
+        new DashboardController();
     }
 
 }
