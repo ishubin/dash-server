@@ -32,6 +32,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         File tempFolder = Files.createTempDir();
+        System.out.println("Widgets compilation folder: " + tempFolder.getAbsolutePath());
         externalStaticFileLocation(tempFolder.getAbsolutePath());
         staticFileLocation("/public");
 

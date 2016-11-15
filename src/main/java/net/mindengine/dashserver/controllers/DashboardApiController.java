@@ -36,7 +36,7 @@ public class DashboardApiController extends Controller {
     private void init() {
         postJson("/api/dashboards", (req, res) -> {
             DashboardRequest dashboardRequest = fromJson(req, DashboardRequest.class);
-            dashboardStorage.createDashboard(dashboardRequest.getName());
+            dashboardStorage.createDashboard(dashboardRequest);
             return dashboardRequest;
         });
 

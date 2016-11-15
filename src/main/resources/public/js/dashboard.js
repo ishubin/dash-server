@@ -85,22 +85,22 @@ Matrix.prototype.reserveSpotAt = function (x, y, width, height) {
     return true;
 };
 
-function Dashboard(dashboardName, domElement, desiredCellWidth, desiredCellHeight) {
+function Dashboard(dashboardName, domElement) {
     this.$dashboard = $(domElement);
     this.dashboardName = dashboardName;
 
-    var dw = this.$dashboard.width(),
-        dh = this.$dashboard.height();
-
-    this.columns = Math.floor(dw / desiredCellWidth);
-    this.rows = Math.floor(dh / desiredCellHeight);
-    this.cellWidth = Math.floor(dw / this.columns),
-    this.cellHeight = Math.floor(dh / this.rows);
-    this.matrix = new Matrix(this.columns, this.rows);
 }
 Dashboard.prototype.update = function () {
     var that = this;
     API.fetchDashboard(this.dashboardName, function (dashboard) {
+        var dw = that.$dashboard.width(),
+            dh = that.$dashboard.height();
+
+        that.columns = Math.floor(dw / dashboard.settings.cellSize.width);
+        that.rows = Math.floor(dh / dashboard.settings.cellSize.height);
+        that.cellWidth = Math.floor(dw / that.columns),
+        that.cellHeight = Math.floor(dh / that.rows);
+        that.matrix = new Matrix(that.columns, that.rows);
         that.renderWidgets(dashboard.widgets);
     });
 
@@ -172,8 +172,8 @@ Dashboard.prototype.renderWidget = function (x, y, widget) {
 };
 
 var _dashboard = null;
-function initDashboard(desiredCellWidth, desiredCellHeight, dashboardName, domElement) {
+function initDashboard(dashboardName, domElement) {
     Widgets.initAllWidgets();
-    _dashboard = new Dashboard(dashboardName, domElement, desiredCellWidth, desiredCellHeight);
+    _dashboard = new Dashboard(dashboardName, domElement);
     _dashboard.update();
 }

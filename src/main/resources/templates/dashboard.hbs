@@ -32,7 +32,7 @@
 <body>
     <script>
         $(function () {
-            initDashboard(150, 100, $("#dashboard").attr("data-dashboard-name"), $("#dashboard").get());
+            initDashboard($("#dashboard").attr("data-dashboard-name"), $("#dashboard").get());
         });
     </script>
     <div id="dashboard" data-dashboard-name="{{dashboardName}}">

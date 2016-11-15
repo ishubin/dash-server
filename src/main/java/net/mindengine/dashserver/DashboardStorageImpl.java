@@ -17,6 +17,7 @@ package net.mindengine.dashserver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.mindengine.dashserver.model.Dashboard;
+import net.mindengine.dashserver.model.DashboardRequest;
 import net.mindengine.dashserver.model.WidgetRequest;
 
 import java.io.File;
@@ -76,7 +77,9 @@ public class DashboardStorageImpl implements DashboardStorage {
     }
 
     @Override
-    public void createDashboard(String name) {
+    public void createDashboard(DashboardRequest dashboardRequest) {
+        String name = dashboardRequest.getName();
+
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name should be defined");
         }
@@ -85,7 +88,7 @@ public class DashboardStorageImpl implements DashboardStorage {
             if (dashboards.containsKey(name)) {
                 throw new IllegalArgumentException("Dashboard already exists with name: " + name);
             }
-            Dashboard dashboard = new Dashboard(name);
+            Dashboard dashboard = new Dashboard(dashboardRequest.getName(), dashboardRequest.getSettings());
             dashboards.put(name, dashboard);
             save(dashboard);
         }

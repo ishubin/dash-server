@@ -16,12 +16,13 @@
 package net.mindengine.dashserver;
 
 import net.mindengine.dashserver.model.Dashboard;
+import net.mindengine.dashserver.model.DashboardRequest;
 import net.mindengine.dashserver.model.WidgetRequest;
 
 import java.util.Map;
 
 public interface DashboardStorage {
-    void createDashboard(String name);
+    void createDashboard(DashboardRequest dashboardRequest);
 
     void updateWidgets(String dashboardName, Map<String, WidgetRequest> widgetRequests);
 

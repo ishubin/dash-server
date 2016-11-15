@@ -17,6 +17,7 @@ package net.mindengine.dashserver.model;
 
 public class DashboardRequest {
     private String name;
+    private DashboardSettings settings;
 
     public String getName() {
         return name;
@@ -26,4 +27,11 @@ public class DashboardRequest {
         this.name = name;
     }
 
+    public DashboardSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(DashboardSettings settings) {
+        this.settings = settings;
+    }
 }

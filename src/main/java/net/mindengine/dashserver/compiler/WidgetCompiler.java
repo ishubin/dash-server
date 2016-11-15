@@ -83,7 +83,7 @@ public class WidgetCompiler implements AssetProvider {
 
     private ScriptAsset copyWidgetScript(String widgetName, File widgetItem) throws IOException {
         String destName = widgetName + ".script.js";
-        File dest = new File(widgetsFolder.getAbsolutePath() + File.separator + destName);
+        File dest = new File(compiledWidgetsFolder.getAbsolutePath() + File.separator + destName);
         dest.createNewFile();
         FileUtils.copyFile(widgetItem, dest);
         return new ScriptAsset(assetPrefix + destName);
