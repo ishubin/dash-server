@@ -9,6 +9,7 @@ post_json "dashboards/demo/widgets" '
         "width": 2,
         "height": 2,
         "sortOrder": "0-graphs",
+        "visible": true,
         "widgetType": "graph-bars",
         "data": {
             "title": "Test Statistics"

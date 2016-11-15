@@ -22,6 +22,7 @@ public class Widget {
     private int height = 1;
     private String sortOrder;
     private String widgetType;
+    private boolean visible = true;
     private JsonNode data;
 
     public int getWidth() {
@@ -64,5 +65,13 @@ public class Widget {
 
     public void setWidgetType(String widgetType) {
         this.widgetType = widgetType;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

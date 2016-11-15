@@ -70,7 +70,7 @@ function Matrix(columns, rows) {
     this.rows = rows;
     this.matrix = [];
 }
-Matrix.prototype.clear = function (width, height) {
+Matrix.prototype.clear = function () {
     for (var i = 0; i < this.columns; i++) {
         this.matrix[i] = [];
         for (var j = 0; j < this.rows; j++) {
@@ -163,9 +163,11 @@ Dashboard.prototype.renderWidgets = function (widgets) {
 
     var thatDashboard = this;
     sortedWidgets.forEach(function (w) {
-        var position = thatDashboard.matrix.reserveSpot(w.widget.width, w.widget.height);
-        if (position != null) {
-            thatDashboard.renderWidget(position.x, position.y, w.widget);
+        if (w.widget.visible) {
+            var position = thatDashboard.matrix.reserveSpot(w.widget.width, w.widget.height);
+            if (position != null) {
+                thatDashboard.renderWidget(position.x, position.y, w.widget);
+            }
         }
     });
 };
