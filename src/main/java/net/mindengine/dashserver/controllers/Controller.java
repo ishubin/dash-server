@@ -30,7 +30,8 @@ import static spark.Spark.delete;
 import static spark.Spark.post;
 import static spark.Spark.get;
 
-public class Controller {
+public abstract class Controller {
+
     private final static TemplateEngine templateEngine = createHandlebarsEngine();
 
     private static TemplateEngine createHandlebarsEngine() {

@@ -17,7 +17,6 @@ package net.mindengine.dashserver.templates;
 
 import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.CompositeTemplateLoader;
 import spark.ModelAndView;
 import spark.TemplateEngine;
 

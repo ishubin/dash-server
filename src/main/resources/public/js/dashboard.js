@@ -8,8 +8,13 @@ function compileTemplates() {
 function WidgetHandler(settings) {
     this.settings = settings;
 }
+WidgetHandler.prototype.init = function () {
+    if (this.settings.init) {
+        this.settings.init.call(this);
+    }
+};
 WidgetHandler.prototype.render = function (widgetElement, data) {
-    this.settings.render(widgetElement, data);
+    this.settings.render.call(this, widgetElement, data);
 };
 
 
@@ -21,6 +26,14 @@ var Widgets = {
 
     findWidgetHandler: function(widgetType) {
         return this.widgets[widgetType];
+    },
+
+    initAllWidgets: function () {
+        for (var key in this.widgets) {
+            if (this.widgets.hasOwnProperty(key)) {
+                this.widgets[key].init();
+            }
+        }
     }
 };
 
@@ -146,6 +159,7 @@ Dashboard.prototype.renderWidget = function (x, y, widget) {
 
 var _dashboard = null;
 function initDashboard(desiredCellWidth, desiredCellHeight, dashboardName, domElement) {
+    Widgets.initAllWidgets();
     _dashboard = new Dashboard(dashboardName, domElement, desiredCellWidth, desiredCellHeight);
     _dashboard.update();
 }

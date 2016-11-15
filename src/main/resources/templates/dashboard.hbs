@@ -22,6 +22,9 @@
         <![endif]-->
         <script src="/js/handlebars-v4.0.5.js"></script>
         <script src="/js/dashboard.js"></script>
+        {{#each widgetAssets}}
+            {{this}}
+        {{/each}}
     </head>
 <body>
     <!-- jquery (necessary for bootstrap's javascript plugins) -->

@@ -15,14 +15,28 @@
  ******************************************************************************/
 package net.mindengine.dashserver.controllers;
 
+import com.github.jknack.handlebars.Handlebars;
+import net.mindengine.dashserver.compiler.AssetProvider;
+
+
+import static java.util.stream.Collectors.toList;
+
 public class DashboardController extends Controller {
-    public DashboardController() {
+
+    private final AssetProvider assetProvider;
+
+    public DashboardController(AssetProvider assetProvider) {
+        this.assetProvider = assetProvider;
         init();
     }
 
     private void init() {
         getHsTpl("/dashboards/:dashboardName", "dashboard", (req, model) -> {
             model.put("dashboardName", req.params("dashboardName"));
+            model.put("widgetAssets", assetProvider.getAssets().stream()
+                .map(wa -> new Handlebars.SafeString(wa.getAsset()))
+                .collect(toList())
+            );
         });
     }
 

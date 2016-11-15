@@ -16,20 +16,34 @@
 package net.mindengine.dashserver;
 
 
+import com.google.common.io.Files;
+import net.mindengine.dashserver.compiler.WidgetCompiler;
 import net.mindengine.dashserver.controllers.DashboardApiController;
 import net.mindengine.dashserver.controllers.DashboardController;
 
+import java.io.File;
+
+import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.staticFileLocation;
 
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws Exception {
+        File tempFolder = Files.createTempDir();
+        externalStaticFileLocation(tempFolder.getAbsolutePath());
+        staticFileLocation("/public");
+
+        File compiledWidgetsFolder = new File(tempFolder.getAbsolutePath() + File.separator + "_widgets_");
+        WidgetCompiler widgetCompiler = new WidgetCompiler("widgets", compiledWidgetsFolder, "/_widgets_/");
+        widgetCompiler.compileAllWidgets();
+
+        new WidgetDataFileWatcher("widgets", widgetCompiler).start();
+
         DashboardStorage dashboardStorage = new DashboardStorageImpl("storage");
 
-        staticFileLocation("/public");
         new DashboardApiController(dashboardStorage);
-        new DashboardController();
+        new DashboardController(widgetCompiler);
     }
 
 }
