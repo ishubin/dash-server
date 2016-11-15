@@ -45,6 +45,11 @@ public class DashboardApiController extends Controller {
             return dashboardStorage.findDashboard(dashboardName);
         });
 
+        getJson("/api/dashboards/:dashboardName/widgets", (req, res) ->  {
+            String dashboardName = req.params("dashboardName");
+            return dashboardStorage.findDashboard(dashboardName).getWidgets();
+        });
+
         postJson("/api/dashboards/:dashboardName/widgets", (req, res) -> {
             String dashboardName = req.params("dashboardName");
             Map<String, WidgetRequest> widgetRequests = fromJson(req, WIDGET_REQUESTS_TYPE);

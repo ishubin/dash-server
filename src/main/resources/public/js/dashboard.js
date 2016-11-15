@@ -1,3 +1,17 @@
+function _stringSortNumber(a, b) {
+    if (!a && b) {
+        return -1;
+    } else if (!b && a) {
+        return 1;
+    }
+    if (a < b) {
+        return -1;
+    } else if (a > b) {
+        return 1;
+    } else {
+        return 0;
+    }
+};
 
 
 var API = {
@@ -5,6 +19,13 @@ var API = {
         $.ajax({
             dataType: "json",
             url: "/api/dashboards/" + dashboardName,
+            success: callback
+        });
+    },
+    fetchDashboardWidgets: function (dashboardName, callback) {
+        $.ajax({
+            dataType: "json",
+            url: "/api/dashboards/" + dashboardName + "/widgets",
             success: callback
         });
     }
@@ -48,13 +69,15 @@ function Matrix(columns, rows) {
     this.columns = columns;
     this.rows = rows;
     this.matrix = [];
+}
+Matrix.prototype.clear = function (width, height) {
     for (var i = 0; i < this.columns; i++) {
         this.matrix[i] = [];
         for (var j = 0; j < this.rows; j++) {
             this.matrix[i][j] = 0;
         }
     }
-}
+};
 Matrix.prototype.reserveSpot = function (width, height) {
     for (var j = 0; j < this.rows - height; j++) {
         for (var i = 0; i < this.columns; i++) {
@@ -85,11 +108,19 @@ Matrix.prototype.reserveSpotAt = function (x, y, width, height) {
     return true;
 };
 
+
+
 function Dashboard(dashboardName, domElement) {
     this.$dashboard = $(domElement);
     this.dashboardName = dashboardName;
 
 }
+Dashboard.prototype.monitor = function () {
+    var that = this;
+    that._monitorInterval = setInterval(function () {
+        that.updateWidgets();
+    }, 2000);
+};
 Dashboard.prototype.update = function () {
     var that = this;
     API.fetchDashboard(this.dashboardName, function (dashboard) {
@@ -105,22 +136,15 @@ Dashboard.prototype.update = function () {
     });
 
 };
-function _stringSortNumber(a, b) {
-    if (!a && b) {
-        return -1;
-    } else if (!b && a) {
-        return 1;
-    }
-    if (a < b) {
-        return -1;
-    } else if (a > b) {
-        return 1;
-    } else {
-        return 0;
-    }
+Dashboard.prototype.updateWidgets = function () {
+    var that = this;
+    API.fetchDashboardWidgets(this.dashboardName, function (widgets) {
+        that.renderWidgets(widgets);
+    });
 };
 Dashboard.prototype.renderWidgets = function (widgets) {
     this.$dashboard.empty();
+    this.matrix.clear();
     var sortedWidgets = [];
     for (var key in widgets) {
         if (widgets.hasOwnProperty(key)) {
@@ -176,4 +200,5 @@ function initDashboard(dashboardName, domElement) {
     Widgets.initAllWidgets();
     _dashboard = new Dashboard(dashboardName, domElement);
     _dashboard.update();
+    _dashboard.monitor();
 }
