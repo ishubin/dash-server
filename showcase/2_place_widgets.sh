@@ -18,7 +18,7 @@ post_json "dashboards/demo/widgets" '
         "width": 1,
         "height": 1,
         "sortOrder": "1-selenium-tests",
-        "widgetType": "test",
+        "widgetType": "test-hub",
         "data": {
             "link": "http://example.com/selenium-tests",
             "title": "Selenium Tests",
@@ -32,7 +32,7 @@ post_json "dashboards/demo/widgets" '
         "width": 1,
         "height": 1,
         "sortOrder": "1-api-tests",
-        "widgetType": "test",
+        "widgetType": "test-hub",
         "data": {
             "link": "http://example.com/api-tests",
             "title": "API Tests",
@@ -46,7 +46,7 @@ post_json "dashboards/demo/widgets" '
         "width": 1,
         "height": 1,
         "sortOrder": "1-db-tests",
-        "widgetType": "test",
+        "widgetType": "test-hub",
         "data": {
             "link": "http://example.com/db-tests",
             "title": "DB Tests",

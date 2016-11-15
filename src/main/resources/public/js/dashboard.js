@@ -1,9 +1,14 @@
 
-var _templates = {};
-function compileTemplates() {
-    var html = $("#tpl-widget-cell").html();
-    _templates.widgetCell = Handlebars.compile(html);
-}
+
+var API = {
+    fetchDashboard: function (dashboardName, callback) {
+        $.ajax({
+            dataType: "json",
+            url: "/api/dashboards/" + dashboardName,
+            success: callback
+        });
+    }
+};
 
 function WidgetHandler(settings) {
     this.settings = settings;
@@ -81,7 +86,6 @@ Matrix.prototype.reserveSpotAt = function (x, y, width, height) {
 };
 
 function Dashboard(dashboardName, domElement, desiredCellWidth, desiredCellHeight) {
-    compileTemplates();
     this.$dashboard = $(domElement);
     this.dashboardName = dashboardName;
 
@@ -143,7 +147,7 @@ Dashboard.prototype.renderWidgets = function (widgets) {
 };
 Dashboard.prototype.renderWidget = function (x, y, widget) {
     var id = "widget-cell-" + x + "-" + y;
-    this.$dashboard.append(_templates.widgetCell({
+    this.$dashboard.append(Handlebars.templates["widget-cell"]({
         widgetCellId: id,
         widgetType: widget.widgetType,
         top: y * this.cellHeight,
@@ -154,7 +158,17 @@ Dashboard.prototype.renderWidget = function (x, y, widget) {
 
     var widgetElement = document.getElementById(id);
 
-    Widgets.findWidgetHandler(widget.widgetType).render(widgetElement, widget.data);
+    var widgetHandler = Widgets.findWidgetHandler(widget.widgetType);
+    if (widgetHandler) {
+        widgetHandler.render(widgetElement, widget.data);
+    } else {
+        var tpl = Handlebars.templates["widget-" + widget.widgetType];
+        if (tpl) {
+            $(widgetElement).html(tpl(widget.data));
+        } else {
+            console.error("Cannot find widget template for: " + widget.widgetType);
+        }
+    }
 };
 
 var _dashboard = null;

@@ -71,12 +71,22 @@ public class WidgetCompiler implements AssetProvider {
                     assets.add(compileWidgetTemplate(widgetName, widgetFolder.getName() + File.separator + widgetItem.getName()));
                 } else if (widgetItem.getName().endsWith(".scss")) {
                     assets.add(compileWidgetSass(widgetName, widgetItem));
+                } else if (widgetItem.getName().endsWith(".js")) {
+                    assets.add(copyWidgetScript(widgetName, widgetItem));
                 }
             }
         }
 
         System.out.println("Compiled data for widget: " + widgetName);
         return assets;
+    }
+
+    private ScriptAsset copyWidgetScript(String widgetName, File widgetItem) throws IOException {
+        String destName = widgetName + ".script.js";
+        File dest = new File(widgetsFolder.getAbsolutePath() + File.separator + destName);
+        dest.createNewFile();
+        FileUtils.copyFile(widgetItem, dest);
+        return new ScriptAsset(assetPrefix + destName);
     }
 
     private StyleAsset compileWidgetSass(String widgetName, File widgetItem) throws Exception {
@@ -102,7 +112,11 @@ public class WidgetCompiler implements AssetProvider {
     }
 
     private static Writer createWriter(File targetFile) throws IOException {
-        targetFile.createNewFile();
+        try {
+            targetFile.createNewFile();
+        } catch (IOException ex) {
+            throw new IOException("Cannot create file: " + targetFile.getAbsolutePath(), ex);
+        }
         return new FileWriter(targetFile);
     }
 
@@ -116,8 +130,7 @@ public class WidgetCompiler implements AssetProvider {
             "  templates['widget-" + widgetName + "'] = template;\n" +
             "  var partials = Handlebars.partials = Handlebars.partials || {};\n" +
             "  partials['widget-" + widgetName + "'] = template;\n" +
-            "})();" +
-            "**********************";
+            "})();";
         String destName = widgetName + ".template.js";
         FileUtils.writeStringToFile(new File(compiledWidgetsFolder.getAbsolutePath() + File.separator + destName), builder);
         return new ScriptAsset(assetPrefix + destName);

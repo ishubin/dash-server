@@ -22,6 +22,7 @@ import net.mindengine.dashserver.controllers.DashboardApiController;
 import net.mindengine.dashserver.controllers.DashboardController;
 
 import java.io.File;
+import java.io.IOException;
 
 import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.staticFileLocation;
@@ -34,7 +35,8 @@ public class Main {
         externalStaticFileLocation(tempFolder.getAbsolutePath());
         staticFileLocation("/public");
 
-        File compiledWidgetsFolder = new File(tempFolder.getAbsolutePath() + File.separator + "_widgets_");
+        File compiledWidgetsFolder = createWidgetsCompileFolder(tempFolder);
+
         WidgetCompiler widgetCompiler = new WidgetCompiler("widgets", compiledWidgetsFolder, "/_widgets_/");
         widgetCompiler.compileAllWidgets();
 
@@ -44,6 +46,14 @@ public class Main {
 
         new DashboardApiController(dashboardStorage);
         new DashboardController(widgetCompiler);
+    }
+
+    private static File createWidgetsCompileFolder(File tempFolder) throws IOException {
+        File compiledWidgetsFolder = new File(tempFolder.getAbsolutePath() + File.separator + "_widgets_");
+        if (!compiledWidgetsFolder.mkdirs()) {
+            throw new IOException("Couldn't create directory: " + compiledWidgetsFolder.getAbsolutePath());
+        }
+        return compiledWidgetsFolder;
     }
 
 }

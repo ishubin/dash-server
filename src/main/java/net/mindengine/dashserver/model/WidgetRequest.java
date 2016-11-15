@@ -23,6 +23,7 @@ public class WidgetRequest extends Widget {
         widget.setWidth(getWidth());
         widget.setHeight(getHeight());
         widget.setSortOrder(getSortOrder());
+        widget.setWidgetType(getWidgetType());
         return widget;
     }
 }

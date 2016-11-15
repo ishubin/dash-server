@@ -20,6 +20,9 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+
+        <script src="/js/jquery-1.8.3.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
         <script src="/js/handlebars-v4.0.5.js"></script>
         <script src="/js/dashboard.js"></script>
         {{#each widgetAssets}}
@@ -27,24 +30,17 @@
         {{/each}}
     </head>
 <body>
-    <!-- jquery (necessary for bootstrap's javascript plugins) -->
-    <script src="/js/jquery-1.8.3.min.js"></script>
-    <!-- include all compiled plugins (below), or include individual files as needed -->
-    <script src="/js/bootstrap.min.js"></script>
     <script>
         $(function () {
-            initDashboard($("#dashboard").attr("data-dashboard-name"));
+            initDashboard(150, 100, $("#dashboard").attr("data-dashboard-name"), $("#dashboard").get());
         });
     </script>
     <div id="dashboard" data-dashboard-name="{{dashboardName}}">
         {{dashboardName}}
     </div>
 
-    <script id="tpl-widget-cell" type="text/x-handlebars-template">
-        <div id="{{widgetCellId}}" class="widget-cell"
-             style="left: {{left}}px; top: {{top}}px; width: {{width}}px; height: {{height}}px;">
-            widget
-        </div>
+    <script type="text/javascript">
+        {{precompile "widget-cell"}}
     </script>
 
 </body>
