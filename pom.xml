@@ -87,10 +87,10 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>net.mindengine.testhub.Main</mainClass>
+              <mainClass>net.mindengine.dashserver.Main</mainClass>
             </manifest>
           </archive>
-          <finalName>test-hub</finalName>
+          <finalName>dash-server</finalName>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
