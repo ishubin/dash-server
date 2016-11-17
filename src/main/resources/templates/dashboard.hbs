@@ -33,10 +33,11 @@
 <body>
     <script>
         $(function () {
-            initDashboard($("#dashboard").attr("data-dashboard-name"), $("#dashboard").get());
+            var $dashboard = $('#dashboard');
+            initDashboard($dashboard.data('dashboard-name'), $dashboard.data('dashboard-profile'), $dashboard.get());
         });
     </script>
-    <div id="dashboard" data-dashboard-name="{{dashboardName}}">
+    <div id="dashboard" data-dashboard-name="{{dashboardName}}" data-dashboard-profile="{{dashboardProfile}}">
         {{dashboardName}}
     </div>
 

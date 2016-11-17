@@ -6,9 +6,17 @@ echo Creating dashboard
 post_json "dashboards" '{
     "name": "demo",
     "settings": {
-        "cellSize": {
-            "width": 150,
-            "height": 100
+        "default": {
+            "cellSize": {
+                "width": 150,
+                "height": 100
+            }
+        },
+        "large": {
+            "cellSize": {
+                "width": 250,
+                "height": 200
+            }
         }
     }
 }'

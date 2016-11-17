@@ -32,6 +32,12 @@ public class DashboardController extends Controller {
 
     private void init() {
         getHsTpl("/dashboards/:dashboardName", "dashboard", (req, model) -> {
+            String profile = req.queryParams("profile");
+            if (profile == null) {
+                profile = "default";
+            }
+
+            model.put("dashboardProfile", profile);
             model.put("dashboardName", req.params("dashboardName"));
             model.put("widgetAssets", assetProvider.getAssets().stream()
                 .map(wa -> new Handlebars.SafeString(wa.getAsset()))

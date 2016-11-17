@@ -110,10 +110,10 @@ Matrix.prototype.reserveSpotAt = function (x, y, width, height) {
 
 
 
-function Dashboard(dashboardName, domElement) {
+function Dashboard(dashboardName, profile, domElement) {
     this.$dashboard = $(domElement);
     this.dashboardName = dashboardName;
-
+    this.profile = profile;
 }
 Dashboard.prototype.monitor = function () {
     var that = this;
@@ -127,9 +127,9 @@ Dashboard.prototype.update = function () {
         var dw = that.$dashboard.width(),
             dh = that.$dashboard.height();
 
-        that.columns = Math.floor(dw / dashboard.settings.cellSize.width);
-        that.rows = Math.floor(dh / dashboard.settings.cellSize.height);
-        that.cellWidth = Math.floor(dw / that.columns),
+        that.columns = Math.floor(dw / dashboard.settings[that.profile].cellSize.width);
+        that.rows = Math.floor(dh / dashboard.settings[that.profile].cellSize.height);
+        that.cellWidth = Math.floor(dw / that.columns);
         that.cellHeight = Math.floor(dh / that.rows);
         that.matrix = new Matrix(that.columns, that.rows);
         that.renderWidgets(dashboard.widgets);
@@ -186,11 +186,18 @@ Dashboard.prototype.renderWidget = function (x, y, widget) {
 
     var tpl = Handlebars.templates["widget-" + widget.widgetType];
     var widgetHandler = Widgets.findWidgetHandler(widget.widgetType);
+    
+    var widgetData = {
+        dashboardName: this.dashboardName,
+        profile: this.profile,
+        data: widget.data
+    };
+    
     if (widgetHandler) {
-        widgetHandler.render(widgetElement, widget.data, tpl);
+        widgetHandler.render(widgetElement, widgetData, tpl);
     } else {
         if (tpl) {
-            $(widgetElement).html(tpl(widget.data));
+            $(widgetElement).html(tpl(widgetData));
         } else {
             console.error("Cannot find widget template for: " + widget.widgetType);
         }
@@ -198,9 +205,9 @@ Dashboard.prototype.renderWidget = function (x, y, widget) {
 };
 
 var _dashboard = null;
-function initDashboard(dashboardName, domElement) {
+function initDashboard(dashboardName, profile, domElement) {
     Widgets.initAllWidgets();
-    _dashboard = new Dashboard(dashboardName, domElement);
+    _dashboard = new Dashboard(dashboardName, profile, domElement);
     _dashboard.update();
     _dashboard.monitor();
 }

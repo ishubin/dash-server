@@ -15,9 +15,11 @@
  ******************************************************************************/
 package net.mindengine.dashserver.model;
 
+import java.util.Map;
+
 public class DashboardRequest {
     private String name;
-    private DashboardSettings settings;
+    private Map<String, DashboardSettings> settings;
 
     public String getName() {
         return name;
@@ -27,11 +29,11 @@ public class DashboardRequest {
         this.name = name;
     }
 
-    public DashboardSettings getSettings() {
+    public Map<String, DashboardSettings> getSettings() {
         return settings;
     }
 
-    public void setSettings(DashboardSettings settings) {
+    public void setSettings(Map<String, DashboardSettings> settings) {
         this.settings = settings;
     }
 }

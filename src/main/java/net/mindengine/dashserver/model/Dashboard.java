@@ -20,14 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Dashboard {
     private String name;
-    private DashboardSettings settings;
+    private Map<String, DashboardSettings> settings;
 
     private Map<String, Widget> widgets = new ConcurrentHashMap<>();
 
     public Dashboard() {
     }
 
-    public Dashboard(String name, DashboardSettings settings) {
+    public Dashboard(String name, Map<String, DashboardSettings> settings) {
         this.name = name;
         this.settings = settings;
     }
@@ -58,11 +58,11 @@ public class Dashboard {
         widgets.put(widgetId, widget);
     }
 
-    public DashboardSettings getSettings() {
+    public Map<String, DashboardSettings> getSettings() {
         return settings;
     }
 
-    public void setSettings(DashboardSettings settings) {
+    public void setSettings(Map<String, DashboardSettings> settings) {
         this.settings = settings;
     }
 }
