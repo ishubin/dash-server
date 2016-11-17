@@ -17,12 +17,15 @@ package net.mindengine.dashserver;
 
 
 import com.google.common.io.Files;
+import net.mindengine.dashserver.compiler.GlobalAssetsFileWatcher;
 import net.mindengine.dashserver.compiler.WidgetCompiler;
 import net.mindengine.dashserver.controllers.DashboardApiController;
 import net.mindengine.dashserver.controllers.DashboardController;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.staticFileLocation;
@@ -37,16 +40,29 @@ public class Main {
         staticFileLocation("/public");
 
         File compiledWidgetsFolder = createWidgetsCompileFolder(tempFolder);
+        File globalAssetsFolder = createGlobalAssetsFolder(tempFolder);
 
         WidgetCompiler widgetCompiler = new WidgetCompiler("widgets", compiledWidgetsFolder, "/_widgets_/");
         widgetCompiler.compileAllWidgets();
 
         new WidgetDataFileWatcher("widgets", widgetCompiler).start();
+        GlobalAssetsFileWatcher globalAssetWatcher = new GlobalAssetsFileWatcher("assets", globalAssetsFolder, "_global_assets_");
+        globalAssetWatcher.start();
 
         DashboardStorage dashboardStorage = new DashboardStorageImpl("storage");
 
         new DashboardApiController(dashboardStorage);
-        new DashboardController(widgetCompiler);
+        new DashboardController(() ->
+            Stream.concat(widgetCompiler.getAssets().stream(), globalAssetWatcher.getAssets().stream()).collect(Collectors.toSet())
+        );
+    }
+
+    private static File createGlobalAssetsFolder(File tempFolder) throws IOException {
+        File globalAssetsFolder = new File(tempFolder.getAbsolutePath() + File.separator + "_global_assets_");
+        if (!globalAssetsFolder.mkdirs()) {
+            throw new IOException("Couldn't create directory: " + globalAssetsFolder.getAbsolutePath());
+        }
+        return globalAssetsFolder;
     }
 
     private static File createWidgetsCompileFolder(File tempFolder) throws IOException {

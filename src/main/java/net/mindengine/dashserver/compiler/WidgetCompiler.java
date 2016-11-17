@@ -34,14 +34,12 @@ import java.util.*;
 
 public class WidgetCompiler implements AssetProvider {
     private final Set<Asset> assets = Collections.synchronizedSet(new HashSet<>());
-    private final String widgetRootFolderPath;
     private final File compiledWidgetsFolder;
     private final String assetPrefix;
     private final File widgetsFolder;
     private final Handlebars handlebars;
 
     public WidgetCompiler(String widgetRootFolderPath, File compiledWidgetsFolder, String assetPrefix) {
-        this.widgetRootFolderPath = widgetRootFolderPath;
         this.compiledWidgetsFolder = compiledWidgetsFolder;
         this.assetPrefix = assetPrefix;
         this.widgetsFolder = new File(widgetRootFolderPath);
