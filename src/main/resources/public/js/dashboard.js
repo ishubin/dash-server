@@ -78,7 +78,16 @@ Matrix.prototype.clear = function () {
         }
     }
 };
-Matrix.prototype.reserveSpot = function (width, height) {
+Matrix.prototype.reserveSpot = function (preferredPosition, width, height) {
+    if (preferredPosition) {
+        console.log(preferredPosition);
+        if (this.hasFreeSpotAt(preferredPosition.left, preferredPosition.top, width, height)) {
+            this.reserveSpotAt(preferredPosition.left, preferredPosition.top, width, height);
+            return {x : preferredPosition.left, y: preferredPosition.top};
+        }
+    }
+    
+    
     for (var j = 0; j < this.rows - height; j++) {
         for (var i = 0; i < this.columns; i++) {
             if (this.hasFreeSpotAt(i, j, width, height)) {
@@ -153,6 +162,12 @@ Dashboard.prototype.renderWidgets = function (widgets) {
     }
 
     sortedWidgets = sortedWidgets.sort(function (a, b) {
+        if (a.widget.position && !b.widget.position) {
+            return -1;
+        } else if (!a.widget.position && b.widget.position) {
+            return 1;
+        }
+        
         var sortNumber = _stringSortNumber(a.widget.sortOrder, b.widget.sortOrder);
         if (sortNumber != 0) {
             return sortNumber;
@@ -164,7 +179,9 @@ Dashboard.prototype.renderWidgets = function (widgets) {
     var thatDashboard = this;
     sortedWidgets.forEach(function (w) {
         if (w.widget.visible) {
-            var position = thatDashboard.matrix.reserveSpot(w.widget.width, w.widget.height);
+            var preferredPosition = w.widget.position || null;
+            
+            var position = thatDashboard.matrix.reserveSpot(preferredPosition, w.widget.width, w.widget.height);
             if (position != null) {
                 thatDashboard.renderWidget(position.x, position.y, w.widget);
             }

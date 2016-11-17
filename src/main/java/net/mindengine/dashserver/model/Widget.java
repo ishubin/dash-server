@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class Widget {
     private int width = 1;
     private int height = 1;
+
+    private Position position;
     private String sortOrder;
     private String widgetType;
     private boolean visible = true;
@@ -73,5 +75,13 @@ public class Widget {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

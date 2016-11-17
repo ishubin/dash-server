@@ -8,6 +8,10 @@ post_json "dashboards/demo/widgets" '
     "graphs": {
         "width": 2,
         "height": 2,
+        "position": {
+            "left": 0,
+            "top": 0
+        },
         "sortOrder": "0-graphs",
         "visible": true,
         "widgetType": "graph-bars",
@@ -18,6 +22,10 @@ post_json "dashboards/demo/widgets" '
     "selenium-tests": {
         "width": 1,
         "height": 1,
+        "position": {
+            "left": 2,
+            "top": 1
+        },
         "sortOrder": "1-selenium-tests",
         "widgetType": "test-hub",
         "data": {

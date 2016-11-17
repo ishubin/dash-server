@@ -25,6 +25,7 @@ public class WidgetRequest extends Widget {
         widget.setSortOrder(getSortOrder());
         widget.setWidgetType(getWidgetType());
         widget.setVisible(isVisible());
+        widget.setPosition(getPosition());
         return widget;
     }
 }
