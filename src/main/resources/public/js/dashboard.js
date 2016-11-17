@@ -39,8 +39,8 @@ WidgetHandler.prototype.init = function () {
         this.settings.init.call(this);
     }
 };
-WidgetHandler.prototype.render = function (widgetElement, data) {
-    this.settings.render.call(this, widgetElement, data);
+WidgetHandler.prototype.render = function (widgetElement, data, template) {
+    this.settings.render.call(this, widgetElement, data, template);
 };
 
 
@@ -119,7 +119,7 @@ Dashboard.prototype.monitor = function () {
     var that = this;
     that._monitorInterval = setInterval(function () {
         that.updateWidgets();
-    }, 2000);
+    }, 5000);
 };
 Dashboard.prototype.update = function () {
     var that = this;
@@ -184,11 +184,11 @@ Dashboard.prototype.renderWidget = function (x, y, widget) {
 
     var widgetElement = document.getElementById(id);
 
+    var tpl = Handlebars.templates["widget-" + widget.widgetType];
     var widgetHandler = Widgets.findWidgetHandler(widget.widgetType);
     if (widgetHandler) {
-        widgetHandler.render(widgetElement, widget.data);
+        widgetHandler.render(widgetElement, widget.data, tpl);
     } else {
-        var tpl = Handlebars.templates["widget-" + widget.widgetType];
         if (tpl) {
             $(widgetElement).html(tpl(widget.data));
         } else {

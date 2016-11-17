@@ -1,4 +1,22 @@
-{{#if icon}}
-    <i class="fa fa-{{icon}}" aria-hidden="true"></i>
-{{/if}}
-<a href="{{link}}">{{title}}</a>
+<div class="status status-{{status}}">
+    {{#if icon}}
+        <i class="fa fa-{{icon}}"></i>
+    {{/if}}
+    {{#if isRunning}}
+        <div class="spinner-container">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    {{/if}}
+
+    <a class="title" href="{{link}}">
+        {{title}}
+    </a>
+    {{#if hasFailedTests}}
+        <span class="failed-tests-count">{{failedTests}}</span>
+    {{/if}}
+
+</div>

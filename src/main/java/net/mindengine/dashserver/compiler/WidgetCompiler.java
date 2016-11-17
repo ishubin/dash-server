@@ -73,7 +73,9 @@ public class WidgetCompiler implements AssetProvider {
                     assets.add(compileWidgetSass(widgetName, widgetItem));
                 } else if (widgetItem.getName().endsWith(".js")) {
                     assets.add(copyWidgetScript(widgetName, widgetItem));
-                }
+                } else if (widgetItem.getName().endsWith(".css")) {
+                assets.add(copyWidgetCss(widgetName, widgetItem));
+            }
             }
         }
 
@@ -81,12 +83,22 @@ public class WidgetCompiler implements AssetProvider {
         return assets;
     }
 
+    private StyleAsset copyWidgetCss(String widgetName, File widgetItem) throws IOException {
+        String destName = copyWidgetFile(widgetName, widgetItem);
+        return new StyleAsset(assetPrefix + destName);
+    }
+
     private ScriptAsset copyWidgetScript(String widgetName, File widgetItem) throws IOException {
-        String destName = widgetName + ".script.js";
+        String destName = copyWidgetFile(widgetName, widgetItem);
+        return new ScriptAsset(assetPrefix + destName);
+    }
+
+    private String copyWidgetFile(String widgetName, File widgetItem) throws IOException {
+        String destName = widgetName + "." + widgetItem.getName();
         File dest = new File(compiledWidgetsFolder.getAbsolutePath() + File.separator + destName);
         dest.createNewFile();
         FileUtils.copyFile(widgetItem, dest);
-        return new ScriptAsset(assetPrefix + destName);
+        return destName;
     }
 
     private StyleAsset compileWidgetSass(String widgetName, File widgetItem) throws Exception {
@@ -95,7 +107,7 @@ public class WidgetCompiler implements AssetProvider {
         File wrappedScss = wrapScssForWidget(widgetName, widgetItem);
         ScssStylesheet e = ScssStylesheet.get(wrappedScss.getAbsolutePath(), null, new SCSSDocumentHandlerImpl(), errorHandler);
         e.compile();
-        String targetFileName = widgetName + ".style.css";
+        String targetFileName = widgetName + "." + widgetItem.getName() + ".style.css";
         File targetFile = new File(compiledWidgetsFolder.getAbsolutePath() + File.separator + targetFileName);
         Writer writer = createWriter(targetFile);
         e.write(writer);

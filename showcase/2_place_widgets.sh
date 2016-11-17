@@ -23,7 +23,7 @@ post_json "dashboards/demo/widgets" '
         "data": {
             "link": "http://example.com/selenium-tests",
             "title": "Selenium Tests",
-            "icon": "selenium",
+            "icon": "window-restore",
             "failedTests": 2,
             "isRunning": true,
             "status": "failed"
@@ -37,7 +37,7 @@ post_json "dashboards/demo/widgets" '
         "data": {
             "link": "http://example.com/api-tests",
             "title": "API Tests",
-            "icon": "api",
+            "icon": "microchip",
             "failedTests": 0,
             "isRunning": false,
             "status": "passed"
@@ -51,7 +51,7 @@ post_json "dashboards/demo/widgets" '
         "data": {
             "link": "http://example.com/db-tests",
             "title": "DB Tests",
-            "icon": "db",
+            "icon": "database",
             "failedTests": 1,
             "isRunning": false,
             "status": "failed"
