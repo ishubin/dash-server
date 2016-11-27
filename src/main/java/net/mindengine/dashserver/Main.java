@@ -38,7 +38,9 @@ public class Main {
     private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        port(Integer.parseInt(property("dashserver.port", "8080")));
+        DashServerProperties properties = new DashServerProperties();
+
+        port(properties.getPort());
 
         File tempFolder = Files.createTempDir();
         LOG.info("Widgets compilation folder: " + tempFolder.getAbsolutePath());
