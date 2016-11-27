@@ -21,6 +21,8 @@ import net.mindengine.dashserver.compiler.GlobalAssetsFileWatcher;
 import net.mindengine.dashserver.compiler.WidgetCompiler;
 import net.mindengine.dashserver.controllers.DashboardApiController;
 import net.mindengine.dashserver.controllers.DashboardController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +34,11 @@ import static spark.Spark.staticFileLocation;
 
 
 public class Main {
+    private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
         File tempFolder = Files.createTempDir();
-        System.out.println("Widgets compilation folder: " + tempFolder.getAbsolutePath());
+        LOG.info("Widgets compilation folder: " + tempFolder.getAbsolutePath());
         externalStaticFileLocation(tempFolder.getAbsolutePath());
         staticFileLocation("/public");
 

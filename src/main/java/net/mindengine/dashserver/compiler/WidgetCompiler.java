@@ -72,8 +72,8 @@ public class WidgetCompiler implements AssetProvider {
                 } else if (widgetItem.getName().endsWith(".js")) {
                     assets.add(copyWidgetScript(widgetName, widgetItem));
                 } else if (widgetItem.getName().endsWith(".css")) {
-                assets.add(copyWidgetCss(widgetName, widgetItem));
-            }
+                    assets.add(copyWidgetCss(widgetName, widgetItem));
+                }
             }
         }
 

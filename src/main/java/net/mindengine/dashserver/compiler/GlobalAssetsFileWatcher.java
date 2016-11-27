@@ -44,7 +44,7 @@ public class GlobalAssetsFileWatcher extends Thread implements AssetProvider {
                 for (WatchEvent<?> watchEvent : watchKey.pollEvents()) {
                     Path watchEventPath = (Path) watchEvent.context();
                     String fileName = watchEventPath.toString();
-                    copyAsset(fileName);
+                    copyFileAsset(fileName);
                 }
 
                 if (!watchKey.reset()) {
@@ -58,10 +58,15 @@ public class GlobalAssetsFileWatcher extends Thread implements AssetProvider {
 
     private void copyAllAssets() {
         File assetsFolder = new File(assetsFolderPath);
-        for (File file : assetsFolder.listFiles()) {
-            if (file.isFile()) {
+        File[] files = assetsFolder.listFiles();
+        if (files != null) {
+            for (File file : files) {
                 try {
-                    copyAsset(file.getName());
+                    if (file.isFile()) {
+                        copyFileAsset(file.getName());
+                    } else if (file.isDirectory()) {
+                        copyDirectoryAsset(file);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -69,21 +74,38 @@ public class GlobalAssetsFileWatcher extends Thread implements AssetProvider {
         }
     }
 
-    private void copyAsset(String fileName) throws IOException {
+    private void copyDirectoryAsset(File dir) throws IOException {
+        String destFolder = compiledAssetsFolder.getAbsolutePath() + File.separator + dir.getName();
+        FileUtils.copyDirectory(dir, new File(destFolder));
+        Files.find(Paths.get(destFolder), 999, (p, bfa) -> bfa.isRegularFile()).forEach(file -> {
+
+            String relativePath = new File(compiledAssetsFolder.getAbsolutePath()).toURI().relativize(file.toUri()).getPath();
+            try {
+                addItemToAssets(relativePath.replace("\\", "/"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void copyFileAsset(String fileName) throws IOException {
+        copyFileToAssets(fileName);
+        addItemToAssets(fileName);
+    }
+
+    private void addItemToAssets(String fileName) throws IOException {
         if (fileName.endsWith(".js")) {
-            copyScript(fileName);
+            addScriptToAssets(fileName);
         } else if (fileName.endsWith(".css")) {
-            copyStyle(fileName);
+            addStyleToAssets(fileName);
         }
     }
 
-    private void copyStyle(String fileName) throws IOException {
-        copyFileToAssets(fileName);
+    private void addStyleToAssets(String fileName) throws IOException {
         assets.add(new StyleAsset("/" + assetPrefix + "/" + fileName));
     }
 
-    private void copyScript(String fileName) throws IOException {
-        copyFileToAssets(fileName);
+    private void addScriptToAssets(String fileName) throws IOException {
         assets.add(new ScriptAsset("/" + assetPrefix + "/" + fileName));
     }
 
