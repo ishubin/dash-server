@@ -3,6 +3,8 @@
 set -e
 ./makeDist.sh
 
-cd dist
+bin=$(find dist -type d | grep galen-bin)
 
+cd $bin
+pwd
 sudo ./install.sh
