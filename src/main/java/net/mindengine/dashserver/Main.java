@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static spark.Spark.externalStaticFileLocation;
+import static spark.Spark.port;
 import static spark.Spark.staticFileLocation;
 
 
@@ -37,6 +38,8 @@ public class Main {
     private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+        port(Integer.parseInt(property("dashserver.port", "8080")));
+
         File tempFolder = Files.createTempDir();
         LOG.info("Widgets compilation folder: " + tempFolder.getAbsolutePath());
         externalStaticFileLocation(tempFolder.getAbsolutePath());
@@ -75,5 +78,9 @@ public class Main {
         }
         return compiledWidgetsFolder;
     }
+    private static String property(String name, String defaultValue) {
+        return System.getProperty(name, defaultValue);
+    }
+
 
 }
