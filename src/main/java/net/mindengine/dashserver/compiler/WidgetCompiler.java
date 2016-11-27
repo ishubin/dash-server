@@ -102,8 +102,7 @@ public class WidgetCompiler implements AssetProvider {
     private StyleAsset compileWidgetSass(String widgetName, File widgetItem) throws Exception {
         SCSSErrorHandler errorHandler = new SCSSErrorHandler();
 
-        File wrappedScss = wrapScssForWidget(widgetName, widgetItem);
-        ScssStylesheet e = ScssStylesheet.get(wrappedScss.getAbsolutePath(), null, new SCSSDocumentHandlerImpl(), errorHandler);
+        ScssStylesheet e = ScssStylesheet.get(widgetItem.getAbsolutePath(), null, new SCSSDocumentHandlerImpl(), errorHandler);
         e.compile();
         String targetFileName = widgetName + "." + widgetItem.getName() + ".style.css";
         File targetFile = new File(compiledWidgetsFolder.getAbsolutePath() + File.separator + targetFileName);
@@ -114,12 +113,6 @@ public class WidgetCompiler implements AssetProvider {
         return new StyleAsset(assetPrefix + targetFileName);
     }
 
-    private File wrapScssForWidget(String widgetName, File source) throws IOException {
-        String content = FileUtils.readFileToString(source);
-        File destFile = File.createTempFile(widgetName, ".scss");
-        FileUtils.writeStringToFile(destFile, ".widget-type-" + widgetName +" {\n" + content + "\n}");
-        return destFile;
-    }
 
     private static Writer createWriter(File targetFile) throws IOException {
         try {

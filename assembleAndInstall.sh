@@ -3,7 +3,7 @@
 set -e
 ./makeDist.sh
 
-bin=$(find dist -type d | grep galen-bin)
+bin=$(find dist -type d | grep dash-server)
 
 cd $bin
 pwd
