@@ -118,6 +118,8 @@ Matrix.prototype.reserveSpotAt = function (x, y, width, height) {
 };
 
 
+var DASHBOARD_LAYOUT_FIXED = "fixed";
+var DASHBOARD_LAYOUT_FLEX = "flex";
 
 function Dashboard(dashboardName, profile, domElement) {
     this.$dashboard = $(domElement);
@@ -136,8 +138,18 @@ Dashboard.prototype.update = function () {
         var dw = that.$dashboard.width(),
             dh = that.$dashboard.height();
 
-        that.columns = Math.floor(dw / dashboard.settings[that.profile].cellSize.width);
-        that.rows = Math.floor(dh / dashboard.settings[that.profile].cellSize.height);
+        var dashboardSettings = dashboard.settings[that.profile];
+        
+        if (DASHBOARD_LAYOUT_FIXED === dashboardSettings.layout) {
+            that.columns = dashboardSettings.columns;
+            that.rows = dashboardSettings.rows;
+        } else if (DASHBOARD_LAYOUT_FLEX === dashboardSettings.layout) {
+            that.columns = Math.floor(dw / dashboardSettings.cellSize.width);
+            that.rows = Math.floor(dh / dashboardSettings.cellSize.height);
+        } else {
+            throw new Error("Unknown dashboard layout: " + dashboardSettings.layout);
+        }
+
         that.cellWidth = Math.floor(dw / that.columns);
         that.cellHeight = Math.floor(dh / that.rows);
         that.matrix = new Matrix(that.columns, that.rows);

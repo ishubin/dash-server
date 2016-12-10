@@ -7,18 +7,14 @@ post_json "dashboards" '{
     "name": "demo",
     "settings": {
         "default": {
-            "cellSize": {
-                "width": 150,
-                "height": 100
-            }
+            "layout": "fixed",
+            "columns": 5,
+            "rows": 5
         },
         "large": {
-            "cellSize": {
-                "width": 250,
-                "height": 200
-            }
+            "layout": "flex",
+            "cellWidth": 140,
+            "cellHeight": 150
         }
     }
 }'
-
-
